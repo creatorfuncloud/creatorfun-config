@@ -64,7 +64,7 @@ async function verifyConfig(connection, client, configKey) {
 
 async function verifyToken(connection, client, mintKey, configKey) {
   const found = await client.state.getPoolByBaseMint(mintKey);
-  const pool = found && (found.account || found);
+  const pool = found && ((found.account && found.account.poolState) || found.account || found);
   const mintInfo = await connection.getParsedAccountInfo(mintKey);
   const mint = mintInfo.value && mintInfo.value.data && mintInfo.value.data.parsed
     ? mintInfo.value.data.parsed.info : {};

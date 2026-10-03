@@ -2,8 +2,8 @@
 
 [English](../README.md) | **한국어** | [中文](README.zh.md) | [日本語](README.ja.md)
 
-[creatorfun.cloud](https://creatorfun.cloud)에서 Meteora 방식으로 런칭되는 모든 토큰은 솔라나 위의 **단 하나의 온체인 config**를 사용합니다.
-이 config는 한 번 생성되었으며 **CreatorFun을 포함한 누구도 변경할 수 없습니다.**
+[creatorfun.cloud](https://creatorfun.cloud)에서 Meteora 방식으로 런칭되는 모든 토큰은 솔라나 위의 **CreatorFun 온체인 config**를 사용합니다.
+config는 두 개이며 **규칙은 완전히 같습니다** ([두 개의 config, 같은 규칙](#두-개의-config-같은-규칙) 참고). 각 config는 한 번 생성되었으며 **CreatorFun을 포함한 누구도 변경할 수 없습니다.**
 이 저장소에는 config를 생성한 실제 코드와, 저희를 믿지 않아도 누구나 직접 검증할 수 있는 스크립트가 들어 있습니다.
 
 ## 규칙
@@ -26,14 +26,14 @@
 Meteora Dynamic Bonding Curve 프로그램은 거래 수수료의 20%를 프로토콜 몫으로 항상 가져갑니다.
 나머지 80%를 이 config에 따라 크리에이터 80%, CreatorFun 20%로 나눕니다.
 
-~~
+```
 1.25% x 20%             = 0.25%  Meteora (프로토콜)
 1.25% x 80% x 80%       = 0.80%  크리에이터
 1.25% x 80% x 20%       = 0.20%  CreatorFun
-~~
+```
 
 **레퍼럴 안내:** 거래에 레퍼럴 계정이 포함되면 Meteora는 자신의 프로토콜 몫 중 20%를 그 계정에 줍니다.
-CreatorFun 웹사이트는 CreatorFun 수수료 지갑을 레퍼럴로 설정할 수 있으며, 이 경우 해당 거래에서
+CreatorFun 웹사이트는 CreatorFun 운영 지갑을 레퍼럴로 설정하며, 이 경우 해당 거래에서
 Meteora는 0.20%, CreatorFun은 추가로 0.05%를 받습니다. 사용자가 내는 수수료(1.25%)와 크리에이터 몫(0.80%)은 절대 바뀌지 않습니다.
 
 ### 펌프펀과 비교 (2026년 9월 기준)
@@ -51,45 +51,60 @@ Meteora는 0.20%, CreatorFun은 추가로 0.05%를 받습니다. 사용자가 �
 
 | | 주소 |
 |---|---|
-| CreatorFun config | [`GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo`](https://solscan.io/account/GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo) |
-| 생성 트랜잭션 | [`5RPCVMvY...V5Uq4g`](https://solscan.io/tx/5RPCVMvYmYDrxHozf2dnTRLxDCRjF1WZhGSqpizwQ5yfkFfaaadJALLEWuw9gsDeYbc1RezNDoWF5GUAW1V5Uq4g) |
+| CreatorFun config v1 (2026-10-03까지) | [`GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo`](https://solscan.io/account/GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo) |
+| v1 생성 트랜잭션 | [`5RPCVMvY...V5Uq4g`](https://solscan.io/tx/5RPCVMvYmYDrxHozf2dnTRLxDCRjF1WZhGSqpizwQ5yfkFfaaadJALLEWuw9gsDeYbc1RezNDoWF5GUAW1V5Uq4g) |
+| CreatorFun config v2 (2026-10-04부터) | [`5wepwtpxdTErVNAn8PXq1J9fZZR3foBS3AssHLJPxkfY`](https://solscan.io/account/5wepwtpxdTErVNAn8PXq1J9fZZR3foBS3AssHLJPxkfY) |
+| v2 생성 트랜잭션 | [`aSqNcBPh...rkd7J7`](https://solscan.io/tx/aSqNcBPhcwMcumHR7grz9dzEYJjHTUq5t3GEV8fbnTLjj7ewtU9P1aBvUw6A5ytsHj8wUM6idQQqnPtCnkrd7J7) |
 | 플랫폼 수수료 지갑 | [`CooB38vtmMP4oLcSsLsmUn1YfLELG7NkfPXYTv21NcBx`](https://solscan.io/account/CooB38vtmMP4oLcSsLsmUn1YfLELG7NkfPXYTv21NcBx) |
+| 운영 지갑 (v2 수수료 수령자) | [`5KQ2oGJbnsJiQ8GXZ1w7QCro2sYZfMEPsmvmLter4irF`](https://solscan.io/account/5KQ2oGJbnsJiQ8GXZ1w7QCro2sYZfMEPsmvmLter4irF) |
+
+## 두 개의 config, 같은 규칙
+
+| | v1 | v2 |
+|---|---|---|
+| 사용 코인 | 2026-10-03까지 런칭된 코인 | 2026-10-04부터 런칭된 코인 |
+| 위 표의 모든 규칙 | 동일 | 동일 |
+| 수수료 수령자 (플랫폼 몫 0.20%와 플랫폼 LP 수수료를 받는 지갑) | 플랫폼 수수료 지갑 | 운영 지갑 (자동으로 받음) |
+| 잔여분 수령자 | 플랫폼 수수료 지갑 | 플랫폼 수수료 지갑 |
+
+차이는 **플랫폼 몫을 어느 CreatorFun 지갑이 받느냐** 하나뿐입니다. v2에서는 운영 지갑이 플랫폼 몫을 자동으로 받아 졸업 비용(가득 찬 커브를 바로 DAMM v2 풀로 옮기는 비용)과 바이백 키퍼의 네트워크 수수료를 내고, 운영에 필요한 금액을 넘는 나머지는 플랫폼 수수료 지갑으로 보냅니다.
+거래자와 크리에이터에게 바뀌는 것은 없습니다. 내는 수수료, 크리에이터 몫 0.80%, LP 잠금은 모두 같으며, 아래 검증 스크립트가 두 config를 항목별로 모두 검사합니다.
 
 ## 직접 검증하기
 
 Node.js 18 이상이 필요합니다. 지갑이나 개인키는 필요 없습니다.
 
-~~bash
+```bash
 git clone https://github.com/creatorfuncloud/creatorfun-config.git
 cd creatorfun-config
 npm install
 npm run verify
-~~
+```
 
-스크립트는 솔라나에서 config 계정을 직접 읽어, Meteora DBC 프로그램 소유인지 확인하고 20개 규칙을 전부 검사합니다:
+스크립트는 솔라나에서 config 계정을 직접 읽어, Meteora DBC 프로그램 소유인지 확인하고 두 config 모두 21개 규칙을 전부 검사합니다:
 
-~~
+```
 PASS  Trading fee 1.25% (12500000 / 1e9)
 PASS  Creator gets 80% of trading fees (after Meteora share)
 PASS  Creator LP 80% permanently locked
 PASS  Fixed supply (no minting)
 ...
-20/20 checks passed
+21/21 checks passed
 RESULT: ALL CHECKS PASSED
-~~
+```
 
-특정 토큰이 이 config로 런칭되었는지 확인하려면 토큰 주소를 넣으세요:
+특정 토큰이 이 config들 중 하나로 런칭되었는지 확인하려면 토큰 주소를 넣으세요:
 
-~~bash
+```bash
 npm run verify -- <토큰_민트_주소>
-~~
+```
 
 직접 운영하는 RPC를 쓰려면 `RPC_URL=<주소> npm run verify`로 실행하세요.
 
 ## 바뀔 수 없는 것과 바뀔 수 있는 것
 
 **바뀔 수 없는 것 (온체인에서 강제됨):**
-- 위 표의 모든 값. 이 config로 런칭된 모든 토큰에 적용됩니다.
+- 위 표의 모든 값. 두 config 중 어느 것으로 런칭된 토큰이든 모두 적용됩니다.
 - 졸업 후 잠긴 LP는 크리에이터도 CreatorFun도 인출할 수 없습니다.
 
 **바뀔 수 있는 것 (온체인 밖의 영역이므로 미리 밝힙니다):**
@@ -102,8 +117,10 @@ npm run verify -- <토큰_민트_주소>
 | 파일 | 용도 |
 |---|---|
 | `scripts/create-config.js` | config를 생성한 실제 스크립트 (2026-09-24 1회 실행) |
+| `scripts/create-config-v2.js` | v2 config를 생성한 실제 스크립트 (2026-10-03 UTC 1회 실행) |
 | `scripts/verify-config.js` | 공개 검증 스크립트 |
 | `deployments/mainnet-config.json` | 생성 기록: 주소, 트랜잭션, 규칙, 생성 직후 읽어온 온체인 상태 |
+| `deployments/mainnet-config-v2.json` | v2 생성 기록 (온체인 상태는 수수료 수령자 외에 v1과 동일) |
 | `package.json` / `package-lock.json` | 실제 사용한 패키지 버전 (`@meteora-ag/dynamic-bonding-curve-sdk@1.5.13` 포함) |
 
 `npm audit`는 Solana / Meteora SDK 내부 의존성의 권고 사항을 표시합니다.

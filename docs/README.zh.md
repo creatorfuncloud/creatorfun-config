@@ -2,9 +2,9 @@
 
 [English](../README.md) | [한국어](README.ko.md) | **中文** | [日本語](README.ja.md)
 
-在 [creatorfun.cloud](https://creatorfun.cloud) 通过 Meteora 方式发行的所有代币，都使用 Solana 上的**同一个链上 config**。
-该 config 仅创建一次，**任何人（包括 CreatorFun）都无法修改**。
-本仓库包含创建该 config 的原始代码，以及任何人无需信任我们即可自行验证的脚本。
+在 [creatorfun.cloud](https://creatorfun.cloud) 通过 Meteora 方式发行的所有代币，都使用 Solana 上的 **CreatorFun 链上 config**。
+共有两个 config，**规则完全相同**（见[两个 config，相同规则](#两个-config相同规则)）。每个 config 仅创建一次，**任何人（包括 CreatorFun）都无法修改**。
+本仓库包含创建这些 config 的原始代码，以及任何人无需信任我们即可自行验证的脚本。
 
 ## 规则
 
@@ -26,14 +26,14 @@
 Meteora Dynamic Bonding Curve 程序始终收取交易手续费的 20% 作为协议分成。
 剩余 80% 按本 config 分配：创作者 80%，CreatorFun 20%。
 
-~~
+```
 1.25% x 20%             = 0.25%  Meteora（协议）
 1.25% x 80% x 80%       = 0.80%  创作者
 1.25% x 80% x 20%       = 0.20%  CreatorFun
-~~
+```
 
 **推荐说明：** 若交易中包含推荐账户，Meteora 会将其协议分成的 20% 给予该账户。
-CreatorFun 网站可能将 CreatorFun 手续费钱包设为推荐人，此时该笔交易中
+CreatorFun 网站将 CreatorFun 运营钱包设为推荐人，此时该笔交易中
 Meteora 获得 0.20%，CreatorFun 额外获得 0.05%。用户支付的手续费（1.25%）和创作者分成（0.80%）永不改变。
 
 ### 与 pump.fun 对比（截至 2026 年 9 月）
@@ -51,45 +51,60 @@ pump.fun 数据来源：[pump.fun/docs/fees](https://pump.fun/docs/fees)（可�
 
 | | 地址 |
 |---|---|
-| CreatorFun config | [`GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo`](https://solscan.io/account/GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo) |
-| 创建交易 | [`5RPCVMvY...V5Uq4g`](https://solscan.io/tx/5RPCVMvYmYDrxHozf2dnTRLxDCRjF1WZhGSqpizwQ5yfkFfaaadJALLEWuw9gsDeYbc1RezNDoWF5GUAW1V5Uq4g) |
+| CreatorFun config v1（2026-10-03 及之前） | [`GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo`](https://solscan.io/account/GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo) |
+| v1 创建交易 | [`5RPCVMvY...V5Uq4g`](https://solscan.io/tx/5RPCVMvYmYDrxHozf2dnTRLxDCRjF1WZhGSqpizwQ5yfkFfaaadJALLEWuw9gsDeYbc1RezNDoWF5GUAW1V5Uq4g) |
+| CreatorFun config v2（2026-10-04 起） | [`5wepwtpxdTErVNAn8PXq1J9fZZR3foBS3AssHLJPxkfY`](https://solscan.io/account/5wepwtpxdTErVNAn8PXq1J9fZZR3foBS3AssHLJPxkfY) |
+| v2 创建交易 | [`aSqNcBPh...rkd7J7`](https://solscan.io/tx/aSqNcBPhcwMcumHR7grz9dzEYJjHTUq5t3GEV8fbnTLjj7ewtU9P1aBvUw6A5ytsHj8wUM6idQQqnPtCnkrd7J7) |
 | 平台手续费钱包 | [`CooB38vtmMP4oLcSsLsmUn1YfLELG7NkfPXYTv21NcBx`](https://solscan.io/account/CooB38vtmMP4oLcSsLsmUn1YfLELG7NkfPXYTv21NcBx) |
+| 运营钱包（v2 手续费领取人） | [`5KQ2oGJbnsJiQ8GXZ1w7QCro2sYZfMEPsmvmLter4irF`](https://solscan.io/account/5KQ2oGJbnsJiQ8GXZ1w7QCro2sYZfMEPsmvmLter4irF) |
+
+## 两个 config，相同规则
+
+| | v1 | v2 |
+|---|---|---|
+| 适用代币 | 2026-10-03 及之前发行的代币 | 2026-10-04 起发行的代币 |
+| 上表中的所有规则 | 相同 | 相同 |
+| 手续费领取人（接收 0.20% 平台分成和平台 LP 手续费） | 平台手续费钱包 | 运营钱包（自动领取） |
+| 剩余部分接收人 | 平台手续费钱包 | 平台手续费钱包 |
+
+唯一的区别是**由哪个 CreatorFun 钱包领取平台分成**。在 v2 中，运营钱包会自动领取平台分成，用于支付毕业费用（曲线满额后立即迁移到 DAMM v2 池）和回购 keeper 的网络手续费，超出运营所需储备的部分会转入平台手续费钱包。
+对交易者和创作者没有任何变化：支付的手续费、创作者的 0.80% 和 LP 锁定完全相同，下面的验证脚本会逐项检查两个 config。
 
 ## 自行验证
 
 需要 Node.js 18 及以上版本。无需钱包或私钥。
 
-~~bash
+```bash
 git clone https://github.com/creatorfuncloud/creatorfun-config.git
 cd creatorfun-config
 npm install
 npm run verify
-~~
+```
 
-脚本直接从 Solana 读取 config 账户，确认其归属于 Meteora DBC 程序，并检查全部 20 条规则：
+脚本直接从 Solana 读取 config 账户，确认其归属于 Meteora DBC 程序，并对两个 config 检查全部 21 条规则：
 
-~~
+```
 PASS  Trading fee 1.25% (12500000 / 1e9)
 PASS  Creator gets 80% of trading fees (after Meteora share)
 PASS  Creator LP 80% permanently locked
 PASS  Fixed supply (no minting)
 ...
-20/20 checks passed
+21/21 checks passed
 RESULT: ALL CHECKS PASSED
-~~
+```
 
-如需确认某个代币是否使用本 config 发行，请传入其 mint 地址：
+如需确认某个代币是否使用其中一个 config 发行，请传入其 mint 地址：
 
-~~bash
+```bash
 npm run verify -- <代币_MINT_地址>
-~~
+```
 
 如需使用自己的 RPC：`RPC_URL=<地址> npm run verify`
 
 ## 不可更改与可更改的内容
 
 **不可更改（由链上强制执行）：**
-- 上表中的所有数值，适用于使用本 config 发行的所有代币。
+- 上表中的所有数值，适用于使用任一 config 发行的所有代币。
 - 毕业后锁定的 LP，创作者和 CreatorFun 均无法提取。
 
 **可更改（属于链下部分，因此提前公开说明）：**
@@ -102,8 +117,10 @@ npm run verify -- <代币_MINT_地址>
 | 文件 | 用途 |
 |---|---|
 | `scripts/create-config.js` | 创建 config 的原始脚本（2026-09-24 执行一次） |
+| `scripts/create-config-v2.js` | 创建 v2 config 的原始脚本（2026-10-03 UTC 执行一次） |
 | `scripts/verify-config.js` | 公开验证脚本 |
 | `deployments/mainnet-config.json` | 创建记录：地址、交易、规则及创建后立即读取的链上状态 |
+| `deployments/mainnet-config-v2.json` | v2 创建记录（链上状态除手续费领取人外与 v1 相同） |
 | `package.json` / `package-lock.json` | 实际使用的依赖版本（含 `@meteora-ag/dynamic-bonding-curve-sdk@1.5.13`） |
 
 `npm audit` 会显示 Solana / Meteora SDK 间接依赖中的安全提示。

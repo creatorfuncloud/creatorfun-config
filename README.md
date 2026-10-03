@@ -2,9 +2,9 @@
 
 **English** | [한국어](docs/README.ko.md) | [中文](docs/README.zh.md) | [日本語](docs/README.ja.md)
 
-Every token launched on [creatorfun.cloud](https://creatorfun.cloud) through the Meteora path uses **one on-chain config** on Solana.
-That config was created once and **cannot be changed by anyone, including CreatorFun**.
-This repository contains the exact code that created it and a script that lets anyone verify it without trusting us.
+Every token launched on [creatorfun.cloud](https://creatorfun.cloud) through the Meteora path uses **a CreatorFun on-chain config** on Solana.
+There are two, with **exactly the same rules** (see [Two configs, same rules](#two-configs-same-rules)). Each was created once and **cannot be changed by anyone, including CreatorFun**.
+This repository contains the exact code that created them and a script that lets anyone verify them without trusting us.
 
 ## The rules
 
@@ -26,14 +26,14 @@ This repository contains the exact code that created it and a script that lets a
 Meteora's Dynamic Bonding Curve program always takes 20% of the trading fee as its protocol share.
 The remaining 80% is split by this config: 80% to the creator, 20% to CreatorFun.
 
-~~
+```
 1.25% x 20%             = 0.25%  Meteora (protocol)
 1.25% x 80% x 80%       = 0.80%  Creator
 1.25% x 80% x 20%       = 0.20%  CreatorFun
-~~
+```
 
 **Referral note:** Meteora gives 20% of its own protocol share to a referral account if a trade includes one.
-The CreatorFun website may set CreatorFun's fee wallet as the referrer, so on those trades
+The CreatorFun website sets CreatorFun's operator wallet as the referrer, so on those trades
 Meteora receives 0.20% and CreatorFun receives an extra 0.05%. The price you pay (1.25%) and the creator share (0.80%) never change.
 
 ### Compared with pump.fun (as of September 2026)
@@ -51,45 +51,60 @@ pump.fun figures from [pump.fun/docs/fees](https://pump.fun/docs/fees); they may
 
 | | Address |
 |---|---|
-| CreatorFun config | [`GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo`](https://solscan.io/account/GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo) |
-| Creation transaction | [`5RPCVMvY...V5Uq4g`](https://solscan.io/tx/5RPCVMvYmYDrxHozf2dnTRLxDCRjF1WZhGSqpizwQ5yfkFfaaadJALLEWuw9gsDeYbc1RezNDoWF5GUAW1V5Uq4g) |
+| CreatorFun config v1 (until 2026-10-03) | [`GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo`](https://solscan.io/account/GRFxBcjZEcjMV8qAMsdiGu43gmqr8WgyyPJh1w3inBPo) |
+| v1 creation transaction | [`5RPCVMvY...V5Uq4g`](https://solscan.io/tx/5RPCVMvYmYDrxHozf2dnTRLxDCRjF1WZhGSqpizwQ5yfkFfaaadJALLEWuw9gsDeYbc1RezNDoWF5GUAW1V5Uq4g) |
+| CreatorFun config v2 (from 2026-10-04) | [`5wepwtpxdTErVNAn8PXq1J9fZZR3foBS3AssHLJPxkfY`](https://solscan.io/account/5wepwtpxdTErVNAn8PXq1J9fZZR3foBS3AssHLJPxkfY) |
+| v2 creation transaction | [`aSqNcBPh...rkd7J7`](https://solscan.io/tx/aSqNcBPhcwMcumHR7grz9dzEYJjHTUq5t3GEV8fbnTLjj7ewtU9P1aBvUw6A5ytsHj8wUM6idQQqnPtCnkrd7J7) |
 | Platform fee wallet | [`CooB38vtmMP4oLcSsLsmUn1YfLELG7NkfPXYTv21NcBx`](https://solscan.io/account/CooB38vtmMP4oLcSsLsmUn1YfLELG7NkfPXYTv21NcBx) |
+| Operator wallet (v2 fee claimer) | [`5KQ2oGJbnsJiQ8GXZ1w7QCro2sYZfMEPsmvmLter4irF`](https://solscan.io/account/5KQ2oGJbnsJiQ8GXZ1w7QCro2sYZfMEPsmvmLter4irF) |
+
+## Two configs, same rules
+
+| | v1 | v2 |
+|---|---|---|
+| Used by | coins launched until 2026-10-03 | coins launched from 2026-10-04 |
+| Every rule in the table above | identical | identical |
+| Fee claimer (receives the 0.20% platform share and the platform LP fees) | platform fee wallet | operator wallet (collects automatically) |
+| Leftover receiver | platform fee wallet | platform fee wallet |
+
+The only difference is **which CreatorFun wallet collects the platform share**. With v2 the operator wallet collects it automatically, uses it to pay for graduations (a full curve moves to its DAMM v2 pool right away) and the buyback keeper's network fees, and sends everything above its working reserve on to the platform fee wallet.
+Nothing changes for traders or creators: the fee you pay, the creator's 0.80% and the LP lock are identical, and the verifier below checks both configs field by field.
 
 ## Verify it yourself
 
 Requires Node.js 18+. No wallet or private key needed.
 
-~~bash
+```bash
 git clone https://github.com/creatorfuncloud/creatorfun-config.git
 cd creatorfun-config
 npm install
 npm run verify
-~~
+```
 
-The script reads the config account directly from Solana, confirms it is owned by the Meteora DBC program, and checks all 20 rules:
+The script reads the config account directly from Solana, confirms it is owned by the Meteora DBC program, and checks all 21 rules on both configs:
 
-~~
+```
 PASS  Trading fee 1.25% (12500000 / 1e9)
 PASS  Creator gets 80% of trading fees (after Meteora share)
 PASS  Creator LP 80% permanently locked
 PASS  Fixed supply (no minting)
 ...
-20/20 checks passed
+21/21 checks passed
 RESULT: ALL CHECKS PASSED
-~~
+```
 
-To check that a specific token was launched with this config, pass its mint address:
+To check that a specific token was launched with one of these configs, pass its mint address:
 
-~~bash
+```bash
 npm run verify -- <TOKEN_MINT_ADDRESS>
-~~
+```
 
 You can use your own RPC with `RPC_URL=<url> npm run verify`.
 
 ## What cannot change, and what can
 
 **Cannot change (enforced on-chain):**
-- Every value in the table above, for every token launched with this config.
+- Every value in the table above, for every token launched with either config.
 - Locked LP after graduation cannot be withdrawn by the creator or by CreatorFun.
 
 **Can change (off-chain, so we state it openly):**
@@ -102,8 +117,10 @@ You can use your own RPC with `RPC_URL=<url> npm run verify`.
 | File | Purpose |
 |---|---|
 | `scripts/create-config.js` | The exact script that created the config (run once, on 2026-09-24) |
+| `scripts/create-config-v2.js` | The exact script that created the v2 config (run once, on 2026-10-03 UTC) |
 | `scripts/verify-config.js` | Public verification script |
 | `deployments/mainnet-config.json` | Creation record: address, transaction, rules, and the on-chain state read back right after creation |
+| `deployments/mainnet-config-v2.json` | v2 creation record (on-chain state identical to v1 except the fee claimer) |
 | `package.json` / `package-lock.json` | Exact dependency versions used, including `@meteora-ag/dynamic-bonding-curve-sdk@1.5.13` |
 
 `npm audit` reports advisories in transitive dependencies of the Solana / Meteora SDKs.
